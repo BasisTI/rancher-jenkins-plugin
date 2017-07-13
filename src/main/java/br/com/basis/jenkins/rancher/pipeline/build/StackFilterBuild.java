@@ -24,4 +24,9 @@ public class StackFilterBuild implements FilterBuild{
     public Filters getFilters() {
         return filters;
     }
+
+    @Override
+    public String toString() {
+        return filters.toString();
+    }
 }

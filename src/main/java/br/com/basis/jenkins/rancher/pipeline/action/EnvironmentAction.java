@@ -15,7 +15,7 @@ public class EnvironmentAction extends AbstractAction<ProjectService, Project> {
     }
 
     public Project findOne(EnvironmentFilterBuild filterBuild) {
-        log("Finding environment : "+ filterBuild.toString());
+        log(String.format("Finding environment : [%s]", filterBuild));
         return findOne(getService().list(filterBuild.getFilters()));
     }
 

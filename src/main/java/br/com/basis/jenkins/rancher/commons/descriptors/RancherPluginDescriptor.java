@@ -70,7 +70,7 @@ public class RancherPluginDescriptor extends BuildStepDescriptor<Publisher> {
 
     @Override
     public String getDisplayName() {
-        return "Rancher Plugin";
+        return "Rancher Pipeline Plugin";
     }
 
     public RancherHostConfigurationDescriptor getRancherHostConfigurationDescriptor() {

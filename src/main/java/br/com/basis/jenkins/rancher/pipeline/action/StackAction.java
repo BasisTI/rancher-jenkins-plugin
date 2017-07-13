@@ -15,7 +15,7 @@ public class StackAction extends AbstractAction<StackService, Stack> {
     }
 
     public Stack findOne(StackFilterBuild filterBuild) {
-        log(String.format("Finding stack : %s", filterBuild.toString()));
+        log(String.format("Finding stack : [%s]", filterBuild));
         return findOne(getService().list(filterBuild.getFilters()));
     }
 }

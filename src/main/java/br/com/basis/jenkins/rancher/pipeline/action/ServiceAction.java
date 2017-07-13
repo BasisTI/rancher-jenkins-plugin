@@ -31,7 +31,7 @@ public class ServiceAction extends AbstractAction<ServiceService, Service> {
         Service service = findById(serviceID);
         finishPreviousUpgrade(service);
         ServiceUpgrade serviceUpgrade = createServiceUpgrade(service);
-        log("Starting upgrade of service "+service.getName());
+        log(String.format("Starting upgrade of service [%s]", service.getName()));
         Response<Service> response = execute(getService().upgrade(service.getId(), serviceUpgrade));
         finishUpgrade(response.body(), 0);
     }
@@ -45,22 +45,22 @@ public class ServiceAction extends AbstractAction<ServiceService, Service> {
 
     private void finishPreviousUpgrade(Service service) {
         if (StatusRancher.isEqual(StatusRancher.UPGRADED, service.getState())) {
-            log(String.format("Finishing previous upgrade of service %s",service.getName()));
-            finishUpgrade(service,0);
+            log(String.format("Finishing previous upgrade of service [%s]", service.getName()));
+            finishUpgrade(service, 0);
         }
     }
 
     private void finishUpgrade(Service service, int timeout) {
-        log(String.format("Waiting for the upgrade to finish %s - %s",service.getName(), service.getState()));
-        if(StatusRancher.isEqual(StatusRancher.ACTIVE, service.getState())){
+        log(String.format("Waiting for the upgrade to finish [%s] - [%s]", service.getName(), service.getState()));
+        if (StatusRancher.isEqual(StatusRancher.ACTIVE, service.getState())) {
             return;
         }
         if (timeout > 10) {
-            throw new RancherRuntimeException(String.format("Timeout - Service could not be upgraded. Current status: %s",service.getState()));
+            throw new RancherRuntimeException(String.format("Timeout - Service could not be upgraded. Current status: [%s]", service.getState()));
         }
         if (StatusRancher.isEqual(StatusRancher.UPGRADED, service.getState())) {
             Response<Service> execute = execute(getService().finishupgrade(service.getId()));
-            if(!execute.isSuccessful()){
+            if (!execute.isSuccessful()) {
                 throw new RancherRuntimeException("Service could not be upgraded.");
             }
         }
@@ -70,8 +70,8 @@ public class ServiceAction extends AbstractAction<ServiceService, Service> {
 
     private Service findById(String id) {
         Service service = execute(getService().get(id)).body();
-        if(service == null){
-            throw new RancherRuntimeException(String.format("Service id %s not found!", id));
+        if (service == null) {
+            throw new RancherRuntimeException(String.format("Service [%s] not found!", id));
         }
         return service;
     }
@@ -79,9 +79,7 @@ public class ServiceAction extends AbstractAction<ServiceService, Service> {
     private void sleep(int time) {
         try {
             Thread.sleep(time);
-        } catch (InterruptedException e) {
-            log(String.format("Ops... %s",e.toString()));
-        }
+        } catch (InterruptedException e) {}
     }
 
     private ServiceUpgrade createServiceUpgrade(Service service) {
