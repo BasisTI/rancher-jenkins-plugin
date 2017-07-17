@@ -22,8 +22,7 @@
     </properties>
 
     <name>Rancher Pipeline</name>
-    <description>TODO</description>
-    <url>https://wiki.jenkins-ci.org/display/JENKINS/TODO+Plugin</url>
+    <description>Plugin for integrating Jenkins with Rancher using pipeline scripts.</description>
 
     <licenses>
         <license>
@@ -44,13 +43,7 @@
             <email>gabfeitosa@gmail.com</email>
         </developer>
     </developers>
-    <!-- Assuming you want to host on @jenkinsci:
-    <scm>
-      <connection>scm:git:git://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
-      <developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
-      <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
-    </scm>
-     -->
+
     <repositories>
         <repository>
             <id>repo.jenkins-ci.org</id>
