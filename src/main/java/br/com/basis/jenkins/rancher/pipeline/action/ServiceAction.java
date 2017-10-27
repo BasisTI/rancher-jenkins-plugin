@@ -16,6 +16,7 @@ public class ServiceAction extends AbstractAction<ServiceService, Service> {
 
     private EnvironmentAction environmentBusiness;
     private StackAction stackBusiness;
+    private int timeout = 4000;
 
     public ServiceAction(Rancher rancher, CpsScript script) {
         super(rancher, ServiceService.class, script);
@@ -43,6 +44,11 @@ public class ServiceAction extends AbstractAction<ServiceService, Service> {
         upgrade(service.getId());
     }
 
+    public void upgrade(String environmentName, String stackName, String serviceName, int timeout) {
+        setTimeout(timeout);
+        upgrade(environmentName, stackName, serviceName);
+    }
+
     private void finishPreviousUpgrade(Service service) {
         if (StatusRancher.isEqual(StatusRancher.UPGRADED, service.getState())) {
             log(String.format("Finishing previous upgrade of service [%s]", service.getName()));
@@ -50,12 +56,12 @@ public class ServiceAction extends AbstractAction<ServiceService, Service> {
         }
     }
 
-    private void finishUpgrade(Service service, int timeout) {
+    private void finishUpgrade(Service service, int timeoutCount) {
         log(String.format("Waiting for the upgrade to finish [%s] - [%s]", service.getName(), service.getState()));
         if (StatusRancher.isEqual(StatusRancher.ACTIVE, service.getState())) {
             return;
         }
-        if (timeout > 10) {
+        if (timeoutCount > 10) {
             throw new RancherRuntimeException(String.format("Timeout - Service could not be upgraded. Current status: [%s]", service.getState()));
         }
         if (StatusRancher.isEqual(StatusRancher.UPGRADED, service.getState())) {
@@ -64,8 +70,8 @@ public class ServiceAction extends AbstractAction<ServiceService, Service> {
                 throw new RancherRuntimeException("Service could not be upgraded.");
             }
         }
-        sleep(4000);
-        finishUpgrade(findById(service.getId()), ++timeout);
+        sleep(this.timeout);
+        finishUpgrade(findById(service.getId()), ++timeoutCount);
     }
 
     private Service findById(String id) {
@@ -92,5 +98,9 @@ public class ServiceAction extends AbstractAction<ServiceService, Service> {
         inServiceUpgradeStrategy.setSecondaryLaunchConfigs(service.getSecondaryLaunchConfigs());
         serviceUpgrade.setInServiceStrategy(inServiceUpgradeStrategy);
         return serviceUpgrade;
+    }
+
+    public void setTimeout(int timeout) {
+        this.timeout = timeout/10;
     }
 }

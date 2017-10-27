@@ -47,6 +47,7 @@ stage('Calling Rancher API'){
         .service() // Rancher Service API
         .upgrade("RANCHER ENVIRONMENT NAME", "RANCHER STACK NAME","RANCHER SERVICE NAME");
         // .upgrade("PRODUCTION", "SYSTEM","SERVER");
+        //you can define a timeout in millis - Default 40000
+        //.upgrade("RANCHER ENVIRONMENT NAME", "RANCHER STACK NAME","RANCHER SERVICE NAME",100000);
 }
 ```
-
