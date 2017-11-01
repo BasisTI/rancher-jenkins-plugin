@@ -24,4 +24,9 @@ public class ServiceFilterBuild implements FilterBuild{
     public Filters getFilters() {
         return filters;
     }
+
+    @Override
+    public String toString() {
+        return filters.toString();
+    }
 }
