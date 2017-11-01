@@ -34,7 +34,9 @@ public abstract class AbstractAction<E, I extends AbstractType> implements Actio
         if (CollectionUtils.isEmpty(execute.getData()) || execute.getData().size() > 1) {
             throw new RancherRuntimeException(this.service.getClass().getName()+ ": Verify search parameters. ");
         }
-        return execute.getData().get(0);
+        final I found = execute.getData().get(0);
+        log(String.format("Found: [%s]", found.getId()));
+        return found;
     }
 
     protected E getService() {

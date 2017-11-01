@@ -25,6 +25,7 @@ public class ServiceAction extends AbstractAction<ServiceService, Service> {
     }
 
     private Service findOne(ServiceFilterBuild filterBuild) {
+        log(String.format("Finding service : [%s]", filterBuild));
         return findOne(getService().list(filterBuild.getFilters()));
     }
 
@@ -75,10 +76,12 @@ public class ServiceAction extends AbstractAction<ServiceService, Service> {
     }
 
     private Service findById(String id) {
+        log(String.format("Finding service by [%s]", id));
         Service service = execute(getService().get(id)).body();
         if (service == null) {
             throw new RancherRuntimeException(String.format("Service [%s] not found!", id));
         }
+        log(String.format("Found [%s] [%s]", service.getId(), service.getName()));
         return service;
     }
 
