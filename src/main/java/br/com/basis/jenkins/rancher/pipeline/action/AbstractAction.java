@@ -30,13 +30,17 @@ public abstract class AbstractAction<E, I extends AbstractType> implements Actio
     }
 
     protected I findOne(Call<TypeCollection<I>> call) {
-        TypeCollection<I> execute = execute(call).body();
-        if (CollectionUtils.isEmpty(execute.getData()) || execute.getData().size() > 1) {
-            throw new RancherRuntimeException(this.service.getClass().getName()+ ": Verify search parameters. ");
+        TypeCollection<I> typeCollection = execute(call).body();
+        if (!hasExactlyOneItem(typeCollection)) {
+            throw new RancherRuntimeException(String.format("Unable to find exactly one %s: verify search parameters.", this.service.getClass().getName()));
         }
-        final I found = execute.getData().get(0);
+        final I found = typeCollection.getData().get(0);
         log(String.format("Found: [%s]", found.getId()));
         return found;
+    }
+
+    protected boolean hasExactlyOneItem(TypeCollection<I> typeCollection) {
+      return typeCollection != null && !CollectionUtils.isEmpty(typeCollection.getData()) && typeCollection.getData().size() == 1;
     }
 
     protected E getService() {

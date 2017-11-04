@@ -1,4 +1,4 @@
 <?jelly escape-by-default='true'?>
 <div>
-    Commons Libraries for interacting with Rancher.
+    Plugin for integrating Jenkins with Rancher using pipeline scripts.
 </div>
