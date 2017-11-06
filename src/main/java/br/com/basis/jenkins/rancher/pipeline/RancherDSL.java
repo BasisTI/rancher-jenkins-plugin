@@ -2,7 +2,6 @@ package br.com.basis.jenkins.rancher.pipeline;
 
 import groovy.lang.Binding;
 import hudson.Extension;
-import hudson.util.StreamTaskListener;
 import org.jenkinsci.plugins.workflow.cps.CpsScript;
 import org.jenkinsci.plugins.workflow.cps.GlobalVariable;
 

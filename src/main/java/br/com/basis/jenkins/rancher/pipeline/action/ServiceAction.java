@@ -11,6 +11,8 @@ import org.jenkinsci.plugins.workflow.cps.CpsScript;
 import org.springframework.stereotype.Component;
 import retrofit2.Response;
 
+import java.io.IOException;
+
 @Component
 public class ServiceAction extends AbstractAction<ServiceService, Service> {
 
@@ -35,7 +37,17 @@ public class ServiceAction extends AbstractAction<ServiceService, Service> {
         ServiceUpgrade serviceUpgrade = createServiceUpgrade(service);
         log(String.format("Starting upgrade of service [%s]", service.getName()));
         Response<Service> response = execute(getService().upgrade(service.getId(), serviceUpgrade));
+        log(String.format("Rancher response upgrade service [%s] [%s]", service.getName(), response));
+        logErrorResponse(service, response);
         finishUpgrade(response.body(), 0);
+    }
+
+    private void logErrorResponse(Service service, Response<Service> response) {
+        if(response.errorBody() != null){
+            try {
+                log(String.format("Rancher response upgrade service [%s] [%s]", service.getName(), response.errorBody().string()));
+            } catch (IOException e) {}
+        }
     }
 
     public void upgrade(String environmentName, String stackName, String serviceName) {
